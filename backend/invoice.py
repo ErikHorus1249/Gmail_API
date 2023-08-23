@@ -1,21 +1,21 @@
-from utils import Create_Service
+import os
 import base64
 
-from utils import match_subject
 from utils import match_amount
-from utils import match_beneficiary_bank_name
-from utils import match_beneficiary_name
-from utils import match_credit_account
-from utils import match_debit_account
+from utils import match_subject
+from utils import Create_Service
 from utils import match_order_number
+from utils import match_debit_account
+from utils import match_credit_account
+from utils import match_beneficiary_name
+from utils import match_beneficiary_bank_name
 
-CLIENT_SECRET_FILE = 'credentials/client_secret.json'
+CLIENT_SECRET_FILE = os.getenv("GMAIL_API_TOKEN")
 API_NAME = 'gmail'
 API_VERSION = 'v1'
 SCOPES = ['https://mail.google.com/']
 
 service = Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)
-
 
 def get_unread_mess():
     message_list = service.users().messages().list(userId='me').execute()
