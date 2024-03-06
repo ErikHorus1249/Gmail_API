@@ -1,15 +1,23 @@
 from typing import Union
 from fastapi import FastAPI
-from invoice import core
+from pydantic import BaseModel
+from utils import send_email
 
 app = FastAPI()
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+class Info(BaseModel):
+    hostname: str
+    ntp: str
+    status: bool
 
 
-@app.get("/invoices/{time}")
-def read_item(time: int):
-    return {"envoices": core(time)}
+app = FastAPI()
+
+
+@app.post("/checker/")
+async def create_item(item: Info):
+    send_email(item.hostname,
+               item.ntp,
+               item.status)
+    return item
